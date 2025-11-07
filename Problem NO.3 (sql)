@@ -1,0 +1,93 @@
+# Problem-Statement-No.3-SQL-
+-- CREATE DATABASE stud;
+-- USE stud;
+CREATE TABLE Customer (
+  C_Id INT PRIMARY KEY,
+  Cname VARCHAR(50),
+  City VARCHAR(50)
+);
+
+INSERT INTO Customer VALUES
+(1, 'John', 'Nashik'),
+(2, 'Seema', 'Aurangabad'),
+(3, 'Amita', 'Nagar'),
+(4, 'Rakesh', 'Pune'),
+(5, 'Samata', 'Nashik'),
+(6, 'Ankita', 'Chandwad'),
+(7, 'Bhavika', 'Pune'),
+(8, 'Deepa', 'Mumbai'),
+(9, 'Nitin', 'Nagpur'),
+(10, 'Pooja', 'Pune');
+
+-- select * from Customer;
+
+CREATE TABLE Account (
+  C_Id INT,
+  Acc_Type VARCHAR(20),
+  Amount INT
+);
+
+INSERT INTO Account VALUES
+(1, 'Current', 5000),
+(2, 'Saving', 20000),
+(3, 'Saving', 70000),
+(4, 'Saving', 50000),
+(6, 'Current', 35000),
+(7, 'Loan', 30000),
+(8, 'Saving', 50000),
+(9, 'Saving', 90000),
+(10, 'Loan', 8000),
+(11, 'Current', 45000);
+
+-- select * from Account where C_Id=1;
+-- Show cname, Acc_Type, and Amount of customers who have a saving account
+SELECT Cname, Acc_Type, Amount
+FROM Customer c
+JOIN Account a ON c.C_Id = a.C_Id
+WHERE Acc_Type = 'Saving';
+
+-- Display the data using Natural, Left, and Right Join
+SELECT *
+FROM Customer
+NATURAL JOIN Account;
+
+SELECT *
+FROM Customer c
+LEFT JOIN Account a ON c.C_Id = a.C_Id;
+
+SELECT *
+FROM Customer c
+RIGHT JOIN Account a ON c.C_Id = a.C_Id;
+
+
+-- Display customers living in the same city as ‘Pooja'
+SELECT *
+FROM Customer
+WHERE City = (SELECT City FROM Customer WHERE Cname = 'Pooja');
+
+-- Display accounts having less amount than average amount
+SELECT *
+FROM Account
+WHERE Amount < (SELECT AVG(Amount) FROM Account);
+
+-- Display the C_Id having the maximum amount in account
+SELECT C_Id
+FROM Account
+WHERE Amount = (SELECT MAX(Amount) FROM Account);
+
+-- Display amount and acc_type of those customers whose amount is the minimum of that acc_type
+SELECT Acc_Type, Amount
+FROM Account a1
+WHERE Amount = (
+  SELECT MIN(Amount)
+  FROM Account a2
+  WHERE a2.Acc_Type = a1.Acc_Type
+);
+
+-- Display the amount of those accounts whose amount is higher than the amount of any saving account
+SELECT *
+FROM Account
+WHERE Amount > (SELECT MAX(Amount) FROM Account WHERE Acc_Type = 'Saving');
+
+
+ 
